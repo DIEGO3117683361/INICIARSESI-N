@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión con Firebase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            position: relative;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
+            color: #000;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #000;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .message {
+            color: red;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+        .overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">A S C L E P I O</div>
+        <h2>Iniciar sesión</h2>
+        <input type="text" id="login-email" placeholder="Correo electrónico">
+        <input type="password" id="login-password" placeholder="Contraseña">
+        <button onclick="login()">Iniciar sesión</button>
+        <p class="message" id="login-message"></p>
+    </div>
+
+    <!-- Contenedor para la animación de desvanecimiento -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Agrega el script de Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhUyDQHm4rYrmN0AMh_Jw_WIo0Nev-Kas",
+            authDomain: "asclepiouser-120dc.firebaseapp.com",
+            projectId: "asclepiouser-120dc",
+            storageBucket: "asclepiouser-120dc.appspot.com",
+            messagingSenderId: "91797934913",
+            appId: "1:91797934913:web:f6634127f41f95898e87c0",
+            measurementId: "G-JZZFMW9H6Z"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Función para iniciar sesión
+        window.login = function() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const messageElement = document.getElementById('login-message');
+            const overlay = document.getElementById('overlay');
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Mostrar la animación de desvanecimiento
+                    document.querySelector('.container').style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.classList.add('show');
+                        setTimeout(() => {
+                            window.location.href = 'https://sites.google.com/view/asclepiomiembros/p%C3%A1gina-principal'; // Redirige a una página de bienvenida
+                        }, 1000); // Tiempo para el desvanecimiento
+                    }, 1000); // Tiempo para el desvanecimiento de la pantalla
+                })
+                .catch((error) => {
+                    messageElement.textContent = `Error: ${error.message}`;
+                });
+        }
+    </script>
+</body>
+</html>
